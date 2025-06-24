@@ -1,0 +1,20 @@
+<h2>Admin Product List</h2>
+<ul>
+    {% for product in products %}
+        <li>
+            <strong>{{ product.product_name }}</strong> - {{ product.price_per_piece }}
+            <br>
+            <!-- Show All Images for this Product -->
+            {% for image in product.images.all %}
+                <img src="{{ image.image.url }}" alt="Product Image" width="100">
+            {% empty %}
+                <p>No images uploaded.</p>
+            {% endfor %}
+            <br>
+            <a href="{% url 'edit_product' product.id %}">Edit</a> |
+            <a href="{% url 'delete_product' product.id %}">Delete</a> |
+            <a href="{% url 'upload_product_image' product.id %}">Upload Image</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'add_product' %}">Add Product</a> | <a href="{% url 'add_category' %}">Add Category</a> | <a href="{% url 'superadmin_logout' %}">Logout</a>

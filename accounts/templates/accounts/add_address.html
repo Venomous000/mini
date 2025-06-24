@@ -1,0 +1,25 @@
+{% extends 'base/user_base.html' %}
+{% block title %}Add Address{% endblock %}
+{% block content %}
+<h2>Add Address</h2>
+<form method="POST">
+    {% csrf_token %}
+    <label>Street Address:</label>
+    <input type="text" name="street_address" required><br><br>
+
+    <label>City:</label>
+    <input type="text" name="city" required><br><br>
+
+    <label>Province:</label>
+    <input type="text" name="province" required><br><br>
+
+    <label>Country:</label>
+    <input type="text" name="country" required><br><br>
+
+    <label>Zip Code:</label>
+    <input type="text" name="zip_code" required><br><br>
+
+    <button type="submit">Add Address</button>
+</form>
+<a href="{% url 'manage_addresses' %}">Back to Addresses</a>
+{% endblock %}

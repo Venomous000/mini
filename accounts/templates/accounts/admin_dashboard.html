@@ -1,0 +1,10 @@
+<h2>Admin Dashboard</h2>
+
+<p>Welcome, Superadmin | <a href="{% url 'superadmin_logout' %}">Logout</a></p>
+
+<ul>
+    <li><a href="{% url 'admin_product_list' %}">View All Products</a></li>
+    <li><a href="{% url 'add_product' %}">Add Product</a></li>
+    <li><a href="{% url 'add_category' %}">Add Category</a></li>
+    <li><a href="{% url 'admin_order_list' %}">Manage Orders</a></li>
+</ul>
