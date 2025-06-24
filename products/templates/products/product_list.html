@@ -1,0 +1,11 @@
+<h2>Product List</h2>
+<ul>
+    {% for product in products %}
+        <li>
+            <a href="{% url 'product_detail' product.id %}">{{ product.product_name }}</a> - {{ product.price_per_piece }}
+            <a href="{% url 'buy_now' product.id %}">Buy Now</a>
+            <a href="{% url 'add_to_cart' product.id %}">Add to Cart</a>
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'logout' %}">Logout</a>

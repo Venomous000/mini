@@ -1,0 +1,47 @@
+<h1>Order Management</h1>
+
+<!-- Search Form -->
+<form method="get" action="{% url 'admin_order_list' %}">
+    <input type="text" name="email" placeholder="User Email" value="{{ email_query }}">
+    <input type="text" name="city" placeholder="City" value="{{ city_query }}">
+    <input type="text" name="province" placeholder="Province" value="{{ province_query }}">
+    <input type="text" name="country" placeholder="Country" value="{{ country_query }}">
+    <input type="text" name="zip_code" placeholder="Zip Code" value="{{ zip_query }}">
+    <select name="status">
+        <option value="">All Statuses</option>
+        <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+        <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>Completed</option>
+        <!-- Add more statuses if needed -->
+    </select>
+    <button type="submit">Search</button>
+</form>
+
+<!-- Orders Table -->
+<table border="1">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>User Email</th>
+            <th>Total Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>View Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+            <tr>
+                <td>{{ order.id }}</td>
+                <td>{{ order.user.email }}</td>
+                <td>{{ order.total_amount }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.order_date }}</td>
+                <td><a href="{% url 'admin_order_detail' order.id %}">View</a></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="6">No orders found.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
