@@ -32,7 +32,7 @@ def login_view(request):
                 user = User.objects.get(email=email)
                 if check_password(password, user.password):
                     login(request, user)
-                    return redirect('user_home')
+                    return redirect('home')
                 else:
                     messages.error(request, 'Invalid password')
             except User.DoesNotExist:

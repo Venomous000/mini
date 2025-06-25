@@ -24,10 +24,6 @@ def product_detail(request, product_id):
 
 
 # Superadmin Views
-@superadmin_required
-def product_list(request):
-    products = Product.objects.filter(is_active=True)
-    return render(request, 'products/product_list.html', {'products': products})
 
 @superadmin_required
 def admin_product_list(request):

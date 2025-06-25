@@ -22,6 +22,11 @@
                 <h3>{{ product.product_name }}</h3>
                 <p>{{ product.product_description }}</p>
                 <p>Price: {{ product.price_per_piece }}</p>
+                <p>{% for image in product.images.all %}</p>
+                    <img src="{{ image.image.url }}" alt="Product Image" width="100">
+                {% empty %}
+                    <p>No images uploaded.</p>
+                {% endfor %}
                 <a href="{% url 'product_detail' product.id %}">View Details</a> |
                 <a href="{% url 'add_to_cart' product.id %}">Add to Cart</a> |
                 <a href="{% url 'buy_now' product.id %}">Buy Now</a>

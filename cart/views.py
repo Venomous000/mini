@@ -21,24 +21,23 @@ def view_cart(request):
 
 @login_required
 def add_to_cart(request, product_id):
-    product = get_object_or_404(Product, id=product_id, is_active=True)
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    product = get_object_or_404(Product, id=product_id)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
 
+    if product.price_per_piece is None:
+        return redirect('user_home')  # or handle however you want
+
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        product=product,
+        defaults={'unit_price': product.price_per_piece, 'quantity': 1}
+    )
     if not created:
-        if cart_item.quantity + 1 > product.stock_quantity:
-            messages.error(request, f"Only {product.stock_quantity} items in stock.")
-            return redirect('product_detail', product_id=product.id)
         cart_item.quantity += 1
-    else:
-        cart_item.unit_price = product.price_per_piece
-        if 1 > product.stock_quantity:
-            messages.error(request, f"Only {product.stock_quantity} items in stock.")
-            return redirect('product_detail', product_id=product.id)
+        cart_item.save()
 
-    cart_item.save()
-    messages.success(request, f"{product.product_name} added to cart.")
-    return redirect('view_cart')
+    next_url = request.GET.get('next', '/products/')
+    return redirect(next_url)
 
 @login_required
 def remove_from_cart(request, cart_item_id):
