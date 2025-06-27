@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'cart',
     'orders',
     'core',
+    'widget_tweaks',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -139,4 +140,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-LOGIN_REDIRECT_URL = '/'

@@ -1,12 +1,15 @@
 {% extends 'base/user_base.html' %}
 {% block title %}Your Profile{% endblock %}
 {% block content %}
-<h2>Your Profile</h2>
-<p><strong>Name:</strong> {{ user.name }}</p>
-<p><strong>Email:</strong> {{ user.email }}</p>
-<p><strong>Phone:</strong> {{ user.phone_number }}</p>
-
-<a href="{% url 'edit_profile' %}">Edit Profile</a> |
-<a href="{% url 'change_password' %}">Change Password</a> |
-<a href="{% url 'manage_addresses' %}">Manage Addresses</a>
+<h2 class="text-2xl font-semibold mb-6">Your Profile</h2>
+<div class="bg-white shadow p-6 rounded w-full max-w-md">
+  <p class="mb-2"><strong>Name:</strong> {{ user.name }}</p>
+  <p class="mb-2"><strong>Email:</strong> {{ user.email }}</p>
+  <p class="mb-4"><strong>Phone:</strong> {{ user.phone }}</p>
+  <div class="space-x-2">
+    <a href="{% url 'edit_profile' %}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Edit Profile</a>
+    <a href="{% url 'change_password' %}" class="inline-block bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Change Password</a>
+    <a href="{% url 'manage_addresses' %}" class="inline-block bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800">Manage Addresses</a>
+  </div>
+</div>
 {% endblock %}

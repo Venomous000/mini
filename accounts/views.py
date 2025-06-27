@@ -1,28 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.hashers import make_password, check_password
-from .models import User, Admin
-from .forms import UserRegistrationForm, UserLoginForm, AdminLoginForm
+from django.contrib.auth import login, logout, update_session_auth_hash
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.decorators import login_required
+from .models import User, Admin, Address
+from .forms import UserRegistrationForm, UserLoginForm
 from accounts.decorators import superadmin_required
+from products.models import Product
 
 
 # User Views
-def register_view(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.password = make_password(form.cleaned_data['password'])
-            user.save()
-            messages.success(request, 'Registration successful. Please login.')
-            return redirect('login')
-    else:
-        form = UserRegistrationForm()
-    return render(request, 'accounts/register.html', {'form': form})
-
-
 def login_view(request):
+    """Authenticate and log in a user."""
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
@@ -30,29 +19,35 @@ def login_view(request):
             password = form.cleaned_data['password']
             try:
                 user = User.objects.get(email=email)
-                if check_password(password, user.password):
+                if user.check_password(password):
                     login(request, user)
-                    return redirect('home')
+                    return redirect('home')  # redirect to home
                 else:
-                    messages.error(request, 'Invalid password')
+                    messages.error(request, 'Invalid password.')
             except User.DoesNotExist:
-                messages.error(request, 'User not found')
+                messages.error(request, 'User not found.')
     else:
         form = UserLoginForm()
     return render(request, 'accounts/login.html', {'form': form})
 
 
+def register_view(request):
+    """Handle user registration form and create a new user account."""
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Registration successful. Please login.')
+            return redirect('login')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'accounts/register.html', {'form': form})
+
+
 def logout_view(request):
+    """Log out the current user."""
     logout(request)
     return redirect('login')
-
-from django.contrib.auth.decorators import login_required
-from products.models import Product
-
-@login_required
-def user_home(request):
-    products = Product.objects.filter(is_active=True)
-    return render(request, 'accounts/user_home.html', {'products': products})
 
 
 @login_required
@@ -64,7 +59,7 @@ def view_profile(request):
 def edit_profile(request):
     if request.method == 'POST':
         name = request.POST.get('name')
-        phone = request.POST.get('phone_number')
+        phone = request.POST.get('phone')
 
         request.user.name = name
         request.user.phone_number = phone
@@ -75,7 +70,6 @@ def edit_profile(request):
 
     return render(request, 'accounts/edit_profile.html', {'user': request.user})
 
-from django.contrib.auth import update_session_auth_hash
 
 @login_required
 def change_password(request):
@@ -149,50 +143,34 @@ def delete_address(request, address_id):
 
     return render(request, 'accounts/confirm_delete_address.html', {'address': address})
 
-
-
-from .models import Address
-
 @login_required
 def manage_addresses(request):
     addresses = Address.objects.filter(user=request.user)
     return render(request, 'accounts/manage_addresses.html', {'addresses': addresses})
 
 
-# Admin Views
+# Superadmin Login View
 def superadmin_login_view(request):
     if request.method == 'POST':
-        email = request.POST.get('username')
+        email = request.POST.get('email')
         password = request.POST.get('password')
-
         try:
             admin = Admin.objects.get(email=email)
-
             if check_password(password, admin.password):
-                # Save superadmin session
                 request.session['superadmin_id'] = admin.id
-                return redirect('admin_dashboard')  # Replace with your actual dashboard route
+                return redirect('admin_dashboard')
             else:
-                messages.error(request, 'Invalid credentials or not a superadmin.')
+                messages.error(request, 'Invalid credentials.')
         except Admin.DoesNotExist:
-            messages.error(request, 'Invalid credentials or not a superadmin.')
-
+            messages.error(request, 'Superadmin not found.')
     return render(request, 'accounts/superadmin_login.html')
 
-
+# Superadmin Logout View
 def superadmin_logout_view(request):
-    try:
-        del request.session['superadmin_id']
-    except KeyError:
-        pass
+    request.session.flush()
     return redirect('superadmin_login')
 
+# Admin Dashboard View
 @superadmin_required
 def admin_dashboard(request):
     return render(request, 'accounts/admin_dashboard.html')
-
-
-
-
-
-

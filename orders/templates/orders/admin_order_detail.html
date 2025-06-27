@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Order Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="max-w-4xl mx-auto py-10 px-4">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">Order #{{ order.id }} Details</h1>
+
+        <!-- Order Info -->
+        <div class="bg-white rounded shadow p-6 mb-6 border">
+            <p><strong>User Email:</strong> {{ order.user.email }}</p>
+            <p><strong>Total Amount:</strong> ${{ order.total_amount }}</p>
+            <p><strong>Order Date:</strong> {{ order.order_date|date:"Y-m-d H:i" }}</p>
+        </div>
+
+        <!-- Order Items Table -->
+        <div class="bg-white rounded shadow p-6 border">
+            <h2 class="text-xl font-semibold mb-4">Ordered Products</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto text-sm text-left text-gray-700">
+                    <thead class="bg-gray-100 border-b">
+                        <tr>
+                            <th class="px-4 py-2">Product</th>
+                            <th class="px-4 py-2">Quantity</th>
+                            <th class="px-4 py-2">Unit Price</th>
+                            <th class="px-4 py-2">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_items %}
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="px-4 py-2">{{ item.product.product_name }}</td>
+                            <td class="px-4 py-2">{{ item.quantity }}</td>
+                            <td class="px-4 py-2">${{ item.unit_price }}</td>
+                            <td class="px-4 py-2">${{ item.unit_price|floatformat:2|add:"0"|floatformat:2|add:"0" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-6">
+            <a href="{% url 'admin_order_list' %}" class="text-blue-600 hover:underline">← Back to Order List</a>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -19,15 +19,19 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
+from django.shortcuts import redirect
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
 
-    # Accounts URLs
-    path('accounts/', include('accounts.urls')),
+    path('', lambda request: redirect('login', permanent=False)),
+
+    path('admin/', admin.site.urls),
 
     # Products URLs
     path('products/', include('products.urls')),
+    
+    # Accounts URLs
+    path('accounts/', include('accounts.urls')),
 
     # Cart URLs
     path('cart/', include('cart.urls')),

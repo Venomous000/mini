@@ -1,0 +1,28 @@
+<!-- templates/products/admin_upload_product_image.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Product Image</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 py-10">
+    <div class="max-w-xl mx-auto bg-white p-6 rounded shadow-md">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">
+            Upload Image for: <span class="text-blue-600">{{ product.product_name }}</span>
+        </h2>
+
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">
+                Upload Image
+            </button>
+        </form>
+
+        <div class="mt-6">
+            <a href="{% url 'admin_product_list' %}" class="text-blue-500 hover:underline">← Back to Product List</a>
+        </div>
+    </div>
+</body>
+</html>

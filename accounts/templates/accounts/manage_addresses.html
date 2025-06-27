@@ -1,21 +1,32 @@
 {% extends 'base/user_base.html' %}
 {% block title %}Manage Addresses{% endblock %}
+
 {% block content %}
-<h2>Your Addresses</h2>
+<h2 class="text-2xl font-semibold mb-6">Your Addresses</h2>
 
-{% if addresses %}
-    <ul>
+<div class="space-y-4">
+    {% if addresses %}
         {% for address in addresses %}
-            <li>
-                {{ address.street_address }}, {{ address.city }}, {{ address.province }}, {{ address.country }} - {{ address.zip_code }}
-                <a href="{% url 'edit_address' address.id %}">Edit</a> | 
-                <a href="{% url 'delete_address' address.id %}">Delete</a>
-            </li>
+            <div class="bg-white p-4 rounded shadow flex justify-between items-start">
+                <div>
+                    <p class="text-gray-800 font-medium">{{ address.full_name }}</p>
+                    <p class="text-gray-600">{{ address.street_address }}, {{ address.city }}, {{ address.province }}, {{ address.country }} - {{ address.zip_code }}</p>
+                    <p class="text-sm text-gray-500 mt-1">Phone: {{ address.phone }}</p>
+                </div>
+                <div class="flex flex-col gap-2 text-right">
+                    <a href="{% url 'edit_address' address.id %}" class="text-blue-600 hover:underline">Edit</a>
+                    <a href="{% url 'delete_address' address.id %}" class="text-red-600 hover:underline">Delete</a>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
-{% else %}
-    <p>No addresses found.</p>
-{% endif %}
+    {% else %}
+        <p class="text-gray-500">No addresses found.</p>
+    {% endif %}
+</div>
 
-<a href="{% url 'add_address' %}">Add New Address</a>
+<div class="mt-6">
+    <a href="{% url 'add_address' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded inline-block">
+        Add New Address
+    </a>
+</div>
 {% endblock %}

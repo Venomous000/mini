@@ -1,7 +1,0 @@
-<h2>Add Category</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Add Category</button>
-</form>
-<a href="{% url 'admin_product_list' %}">Back to Product List</a>

@@ -1,10 +1,49 @@
-<h2>Admin Dashboard</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center px-4">
+    <div class="max-w-4xl w-full bg-white rounded-lg shadow-lg p-8">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">👑 Admin Dashboard</h1>
 
-<p>Welcome, Superadmin | <a href="{% url 'superadmin_logout' %}">Logout</a></p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Products -->
+            <a href="{% url 'admin_product_list' %}" class="bg-blue-50 hover:bg-blue-100 rounded-lg p-6 shadow group transition">
+                <div class="flex items-center space-x-4">
+                    <div class="text-blue-600 text-4xl">🛒</div>
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800 group-hover:text-blue-700">Manage Products</h2>
+                        <p class="text-sm text-gray-500">View, edit or remove products</p>
+                    </div>
+                </div>
+            </a>
 
-<ul>
-    <li><a href="{% url 'admin_product_list' %}">View All Products</a></li>
-    <li><a href="{% url 'add_product' %}">Add Product</a></li>
-    <li><a href="{% url 'add_category' %}">Add Category</a></li>
-    <li><a href="{% url 'admin_order_list' %}">Manage Orders</a></li>
-</ul>
+            <!-- Orders -->
+            <a href="{% url 'admin_order_list' %}" class="bg-green-50 hover:bg-green-100 rounded-lg p-6 shadow group transition">
+                <div class="flex items-center space-x-4">
+                    <div class="text-green-600 text-4xl">📦</div>
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800 group-hover:text-green-700">Manage Orders</h2>
+                        <p class="text-sm text-gray-500">Search, track and view orders</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Logout -->
+            <a href="{% url 'superadmin_logout' %}" class="bg-red-50 hover:bg-red-100 rounded-lg p-6 shadow group transition">
+                <div class="flex items-center space-x-4">
+                    <div class="text-red-600 text-4xl">🔓</div>
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800 group-hover:text-red-700">Logout</h2>
+                        <p class="text-sm text-gray-500">Exit the admin panel</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

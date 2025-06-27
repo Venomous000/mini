@@ -1,16 +1,35 @@
-<h2>{{ product.product_name }}</h2>
-<p>{{ product.product_description }}</p>
-<p>Price: {{ product.price_per_piece }}</p>
-<p>Stock: {{ product.stock_quantity }}</p>
+{% extends 'base/user_base.html' %}
+{% block title %}{{ product.product_name }}{% endblock %}
 
-<a href="{% url 'buy_now' product.id %}">Buy Now</a>
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-bold mb-2">{{ product.product_name }}</h2>
+    <p class="text-gray-600 mb-4">{{ product.product_description }}</p>
+    
+    <div class="mb-4">
+        {% if product.images.all %}
+            <div class="flex flex-wrap gap-4">
+                {% for image in product.images.all %}
+                    <a href="{{ image.image.url }}" target="_blank">
+                        <img src="{{ image.image.url }}" alt="{{ product.product_name }}" class="w-32 h-32 object-cover rounded border hover:scale-105 transition" />
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="italic text-gray-400">No images available.</p>
+        {% endif %}
+    </div>
 
-<div>
-    {% for image in product.images.all %}
-        <img src="{{ image.image.url }}" alt="{{ product.product_name }}" width="300">
-    {% empty %}
-        <p>No images available.</p>
-    {% endfor %}
+    <p class="text-gray-800 mb-1">Stock: {{ product.stock_quantity }}</p>
+    <p class="text-blue-600 font-semibold text-lg">Price: ${{ product.price_per_piece }}</p>
+
+    <div class="mt-4 flex gap-3">
+        <a href="{% url 'buy_now' product.id %}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Buy Now</a>
+        <a href="{% url 'add_to_cart' product.id %}?next={{ request.path }}" class="bg-yellow-400 text-white px-4 py-2 rounded hover:bg-yellow-500">Add to Cart</a>
+    </div>
+
+    <div class="mt-6">
+        <a href="{% url 'home' %}" class="text-blue-600 hover:underline">← Back to Products</a>
+    </div>
 </div>
-
-<a href="{% url 'product_list' %}">Back to Products</a>
+{% endblock %}

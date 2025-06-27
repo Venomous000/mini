@@ -1,12 +1,50 @@
-<h2>Checkout - Buy Now</h2>
+{% extends 'base/user_base.html' %}
+{% block title %}Checkout - Buy Now{% endblock %}
 
-<p><strong>Product:</strong> {{ product.product_name }}</p>
-<p><strong>Price:</strong> {{ product.price_per_piece }}</p>
-<p><strong>Stock:</strong> {{ product.stock_quantity }}</p>
+{% block content %}
+<div class="max-w-3xl mx-auto py-8">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800">Checkout - Buy Now</h2>
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Place Order</button>
-</form>
+    <!-- Product Summary -->
+    <div class="bg-white border rounded shadow p-4 mb-6">
+        <h3 class="text-lg font-semibold mb-2">Product:</h3>
+        <p class="mb-1"><strong>Name:</strong> {{ product.product_name }}</p>
+        <p class="mb-1"><strong>Price:</strong> ${{ product.price_per_piece }}</p>
+        <p><strong>Stock:</strong> {{ product.stock_quantity }}</p>
+    </div>
 
-<a href="{% url 'product_detail' product.id %}">Cancel</a>
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- Saved Addresses -->
+        <div>
+            <h4 class="text-lg font-semibold mb-2">Select a Saved Address:</h4>
+            {% for address in addresses %}
+                <label class="block p-3 border rounded mb-2 bg-white">
+                    <input type="radio" name="selected_address" value="{{ address.id }}" class="mr-2">
+                    {{ address.street_address }}, {{ address.city }}, {{ address.province }}, {{ address.country }} - {{ address.zip_code }}
+                </label>
+            {% empty %}
+                <p class="text-sm text-gray-500">You don’t have any saved addresses.</p>
+            {% endfor %}
+        </div>
+
+        <!-- New Address Form -->
+        <div class="bg-gray-100 p-4 rounded">
+            <h4 class="text-lg font-semibold mb-3">Or Add a New Address:</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" name="street_address" placeholder="Street Address" class="border px-3 py-2 rounded">
+                <input type="text" name="city" placeholder="City" class="border px-3 py-2 rounded">
+                <input type="text" name="province" placeholder="Province" class="border px-3 py-2 rounded">
+                <input type="text" name="country" placeholder="Country" class="border px-3 py-2 rounded">
+                <input type="text" name="zip_code" placeholder="ZIP Code" class="border px-3 py-2 rounded">
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Place Order</button>
+    </form>
+
+    <a href="{% url 'product_detail' product.id %}" class="text-blue-600 hover:underline block mt-6">← Cancel</a>
+</div>
+{% endblock %}
